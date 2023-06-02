@@ -11,16 +11,17 @@ public class ContactsManager {
 
     private static final String BANNER_FILE_NAME = "banner.txt";
     private static final Path BANNER_PATH = Paths.get(BANNER_FILE_NAME);
-    private String banner;
+    private static String banner;
     private static final String Green = "\u001B[32m";
     private static final String Red = "\u001B[31m";
     private static final String ERed = "\033[41m";
     private static final String Reset = "\u001B[0m";
 
-
+    static {
+        banner = loadBanner();
+    }
     public ContactsManager() {
         this.contacts = loadContacts(); // Loading contacts from file during initialization
-        this.banner = loadBanner();
     }
 
     private List<Contact> loadContacts() {
@@ -46,7 +47,7 @@ public class ContactsManager {
         }
         return contacts;
     }
-    private String loadBanner() {
+    private static String loadBanner() {
         try {
             return Files.readString(BANNER_PATH);
         } catch (IOException e) {
@@ -55,6 +56,7 @@ public class ContactsManager {
         }
     }
     public void start() {
+        System.out.println(banner);
         int option;
         do {
             option = showMenuOption();
@@ -149,7 +151,6 @@ public class ContactsManager {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
-            System.out.println(banner);
             System.out.println("\n--- Contacts Manager ---");
             System.out.println("1. View All Contacts");
             System.out.println("2. " + Green + "Add" + Reset + " New Contact");
