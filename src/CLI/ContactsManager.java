@@ -141,10 +141,10 @@ public class ContactsManager {
     }
 
     private void showContacts(){
-        System.out.printf("%-20s | %s\n", "Name", "Phone number");
-        System.out.println("---------------------|------");
+        System.out.printf("%-10s | %s\n", "Name", "Phone number");
+        System.out.println("-----------|-------------");
         for (Contact contact : contacts) {
-            System.out.printf("%-20s | %s\n", contact.getName(), contact.getPhoneNumber());
+            System.out.printf("%-10s | %s\n", contact.getName(), contact.getPhoneNumber());
         }
     }
     private int showMenuOption() {
