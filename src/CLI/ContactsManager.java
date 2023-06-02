@@ -9,9 +9,18 @@ public class ContactsManager {
     private static final Path PATH = Paths.get(FILE_NAME); // Path to the file
     private List<Contact> contacts; // List of Contact objects
 
+    private static final String BANNER_FILE_NAME = "banner.txt";
+    private static final Path BANNER_PATH = Paths.get(BANNER_FILE_NAME);
+    private String banner;
+    private static final String Green = "\u001B[32m";
+    private static final String Red = "\u001B[31m";
+    private static final String ERed = "\033[41m";
+    private static final String Reset = "\u001B[0m";
+
 
     public ContactsManager() {
         this.contacts = loadContacts(); // Loading contacts from file during initialization
+        this.banner = loadBanner();
     }
 
     private List<Contact> loadContacts() {
@@ -37,7 +46,14 @@ public class ContactsManager {
         }
         return contacts;
     }
-
+    private String loadBanner() {
+        try {
+            return Files.readString(BANNER_PATH);
+        } catch (IOException e) {
+            System.out.println("Could not load banner. Defaulting to empty string.");
+            return "";
+        }
+    }
     public void start() {
         int option;
         do {
@@ -79,7 +95,7 @@ public class ContactsManager {
                 }
             }
             contacts.add(new Contact(name, phoneNumber));
-            System.out.println("Contact added.");
+            System.out.println(Green + "Contact added." + Reset);
             saveContacts();
             return;
         }
@@ -133,12 +149,13 @@ public class ContactsManager {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
+            System.out.println(banner);
             System.out.println("\n--- Contacts Manager ---");
             System.out.println("1. View All Contacts");
-            System.out.println("2. Add New Contact");
+            System.out.println("2. " + Green + "Add" + Reset + " New Contact");
             System.out.println("3. Search Contact by Name");
-            System.out.println("4. Delete an existing contact");
-            System.out.println("5. Exit");
+            System.out.println("4. " + Red + "Delete" + Reset + " an existing contact");
+            System.out.println("5. " + ERed + "Exit" + Reset);
             System.out.println("Enter an option (1, 2, 3, 4 or 5):");
             try {
                 return scanner.nextInt();
@@ -150,11 +167,11 @@ public class ContactsManager {
         return -1;
     }
     private void deleteContact() {
-        System.out.println("\n---Delete Contact?---");
-        System.out.println("Enter name to delete: ");
+        System.out.println("\n---" + Red + "Delete" + Reset + " Contact?---");
+        System.out.println("Enter name to " + Red + "Delete" + Reset + ": ");
         Scanner scanner = new Scanner(System.in);
         String name = scanner.nextLine();
-        System.out.println("Are you sure you want to delete" + name + "? (Yes/No)");
+        System.out.println("Are you sure you want to " + Red + "Delete" + Reset + "" + name + "? (Yes/No)");
         String confirmation = scanner.nextLine();
         if (confirmation.equalsIgnoreCase("Yes")) {
             Iterator<Contact> iterator = contacts.iterator();
@@ -183,7 +200,7 @@ public class ContactsManager {
                     "  `---'  |___|  `---'\n" +
                     "         `---'\n");
         } else {
-            System.out.println("Deletion cancelled.");
+            System.out.println(Red + "Deletion cancelled." + Reset);
         }
     }
 }
